@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pharbst <pharbst@student.42.heilbronn.d    +#+  +:+       +#+         #
+#    By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/14 12:31:53 by pharbst           #+#    #+#              #
-#    Updated: 2026/03/14 12:48:33 by pharbst          ###   ########.fr        #
+#    Updated: 2026/03/14 16:27:34 by pharbst          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
