@@ -6,7 +6,7 @@
 #    By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/14 12:31:53 by pharbst           #+#    #+#              #
-#    Updated: 2026/03/14 16:27:34 by pharbst          ###   ########.fr        #
+#    Updated: 2026/03/16 23:45:09 by pharbst          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,8 @@ BNAME	:=	checker
 
 CC		:=	cc
 CFLAGS	:=	-Wall -Werror -Wextra
-# CFLAGS	:=	-Wall -Werror -Wextra -Wunreachable-code -g
-# CFLAGS	+=	-fsanatize=address
+DEBUG_CFLAGS	:=	-g
+# DEBUG_CFLAGS	+=	-fsanatize=address
 
 HEADER_DIR	:=	./include
 HEADER		:=	push_swap.h
@@ -45,6 +45,10 @@ OBJS	:=	$(SRCS:%.c=$(ODIR)/%.o)
 # **************************************************************************** #
 # Compilation Rules
 # **************************************************************************** #
+
+test:
+	$(CC) $(DEBUG_CFLAGS) src/parsing/arg_parser.c -o app
+	./app $(ARGS)
 
 clean:
 	@$(MAKE) -s proname_header
