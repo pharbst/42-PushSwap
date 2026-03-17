@@ -6,7 +6,7 @@
 /*   By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 13:54:38 by pharbst           #+#    #+#             */
-/*   Updated: 2026/03/17 02:07:36 by pharbst          ###   ########.fr       */
+/*   Updated: 2026/03/17 02:30:09 by pharbst          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,18 @@ char *normalize_and_reduce(char *input) {
 	if (!input)
 		return (input);
 	index = 0;
-	printf("input: %s", input);
+	printf("input: %s\n", input);
 	// exit(0);
 
 	while (strchr("\f\n\r\t\v 0123456789+-", input[index]) && index <= strlen(input)) {
 		printf("%zu\n", index);
 		// skip digits
-		while (strchr("0123456789", input[index]))
+		if (strchr("0123456789", input[index])) {
 			index++;
+			continue;
+		}
 		// switch tabs etc to white space
-		if (strchr("\t\n\r\f\v", input[index]))
+		if (strchr("\t\n\r\f\v", input[index]) && input[index])
 			input[index] = ' ';
 		// seems incorrect
 		// yes it is this overwrites the actual whitespace i want to keep
@@ -246,7 +248,7 @@ int main(int argc, char **argv) {
 		// validity check
 		return_value = 1;
 		if (_check_sorted(int_stack))
-			return (parse_error("Error\n", NULL, NULL, (void*)&return_value));
+			return (parse_error("Error stack sorted\n", NULL, NULL, (void*)&return_value));
 		printf("check sorted passed\n");
 	}
 	return (0);
