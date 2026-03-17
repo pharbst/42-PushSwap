@@ -6,7 +6,7 @@
 /*   By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 13:54:38 by pharbst           #+#    #+#             */
-/*   Updated: 2026/03/17 00:20:29 by pharbst          ###   ########.fr       */
+/*   Updated: 2026/03/17 01:16:21 by pharbst          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,30 +149,78 @@ int count_spaces(char *input) {
 	if (!input)
 		return (-1);
 	index = 0;
+	counter = 0;
 	while (input[index])
 		if (input[index++] == ' ')
 			counter++;
 	return (counter);
 }
 
-// creates an integer array of the normalized string
-// int *create_raw_stack(char *input_string, int num_of_elements) {
-// 	int		*raw_stack;
+typedef struct s_int_stack {
+	size_t	len;
+	int		*raw_stack;
+}	t_int_stack;
 
-// 	raw_stack = calloc(num_of_elements, sizeof(int));
-// 	if (!raw_stack)
-// 		return (raw_stack);
-	
-// }
+void insert_values(t_int_stack *int_stack, char *input_string) {
+	size_t	index;
+	size_t	sub_index;
+	int		to_insert;
+	size_t	element;
+
+	index = 0;
+	element = int_stack->len;
+	while (element--) {
+		if (input_string[index] == ' ')
+			index++;
+		sub_index = 0;
+		while (strchr("+-0123456789", input_string[index + sub_index]))
+			sub_index++;
+		if (input_string[index + sub_index]) {
+			input_string[index + sub_index] = '\0';
+			int_stack->raw_stack[int_stack->len - element - 1] = atoi(&input_string[index]);
+			input_string[index + sub_index] = ' ';
+		}
+		else
+			int_stack->raw_stack[int_stack->len - element - 1] = atoi(&input_string[index]);
+		index += sub_index;
+	}
+}
+
+// creates an integer array of the normalized string
+t_int_stack *create_raw_stack(char *input_string, int num_of_elements) {
+	t_int_stack	*int_stack;
+
+	// allocate
+	int_stack = calloc(1, sizeof(t_int_stack));
+	if (!int_stack)
+		return (NULL);
+	int_stack->raw_stack = calloc(num_of_elements, sizeof(int));
+	if (!int_stack->raw_stack)
+		return (free(int_stack), NULL);
+	int_stack->len = num_of_elements;
+
+	// loop over string and extract one element convert it to int and put it into int_stack->raw_stack
+	// make it a function
+	insert_values(int_stack, input_string);
+	return (int_stack);
+}
 
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-	char	*normalized;
-	int		*array;
+	char		*normalized;
+	t_int_stack	*int_stack;
+	int			elements;
 
-	if (argc > 2)
-		printf("result:|%s|\n", normalize_input(argv));
+	if (argc > 2) {
+		normalized = normalize_input(argv);
+		printf("result:|%s|\n", normalized);
+		elements = count_spaces(normalized) + 1;
+		int_stack = create_raw_stack(normalized, elements);
+		while (elements--) {
+			printf("%d\n", int_stack->raw_stack[int_stack->len - elements - 1]);
+		}
+	}
 	return (0);
 }
 
