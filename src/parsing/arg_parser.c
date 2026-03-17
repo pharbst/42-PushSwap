@@ -6,7 +6,7 @@
 /*   By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 13:54:38 by pharbst           #+#    #+#             */
-/*   Updated: 2026/03/17 01:16:21 by pharbst          ###   ########.fr       */
+/*   Updated: 2026/03/17 02:07:36 by pharbst          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,11 +161,12 @@ typedef struct s_int_stack {
 	int		*raw_stack;
 }	t_int_stack;
 
-void insert_values(t_int_stack *int_stack, char *input_string) {
+bool insert_values(t_int_stack *int_stack, char *input_string) {
 	size_t	index;
 	size_t	sub_index;
 	int		to_insert;
 	size_t	element;
+	size_t	element_dub;
 
 	index = 0;
 	element = int_stack->len;
@@ -177,13 +178,21 @@ void insert_values(t_int_stack *int_stack, char *input_string) {
 			sub_index++;
 		if (input_string[index + sub_index]) {
 			input_string[index + sub_index] = '\0';
-			int_stack->raw_stack[int_stack->len - element - 1] = atoi(&input_string[index]);
+			to_insert = atoi(&input_string[index]);
 			input_string[index + sub_index] = ' ';
 		}
 		else
-			int_stack->raw_stack[int_stack->len - element - 1] = atoi(&input_string[index]);
+			to_insert = atoi(&input_string[index]);
+		element_dub = 0;
+		while (element + element_dub < int_stack->len) {
+			if (int_stack->raw_stack[element_dub] == to_insert)
+				return (true);
+			element_dub++;
+		}
+		int_stack->raw_stack[int_stack->len - element - 1] = to_insert;
 		index += sub_index;
 	}
+	return (false);
 }
 
 // creates an integer array of the normalized string
@@ -205,21 +214,40 @@ t_int_stack *create_raw_stack(char *input_string, int num_of_elements) {
 	return (int_stack);
 }
 
+bool _check_sorted(t_int_stack *int_stack) {
+	size_t	index;
+
+	if (int_stack->len < 2)
+		return (true);
+	index = 1;
+	while (index < int_stack->len)
+		if (int_stack->raw_stack[index] < int_stack->raw_stack[(index++) - 1])
+			return (false);
+	return (true);
+}
+
 #include <stdio.h>
 
 int main(int argc, char **argv) {
 	char		*normalized;
 	t_int_stack	*int_stack;
 	int			elements;
+	int			return_value;
 
 	if (argc > 2) {
+		// normalize and reduce input
 		normalized = normalize_input(argv);
 		printf("result:|%s|\n", normalized);
+		// int_stack creation
 		elements = count_spaces(normalized) + 1;
 		int_stack = create_raw_stack(normalized, elements);
-		while (elements--) {
+		while (elements--)
 			printf("%d\n", int_stack->raw_stack[int_stack->len - elements - 1]);
-		}
+		// validity check
+		return_value = 1;
+		if (_check_sorted(int_stack))
+			return (parse_error("Error\n", NULL, NULL, (void*)&return_value));
+		printf("check sorted passed\n");
 	}
 	return (0);
 }
