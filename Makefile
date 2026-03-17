@@ -6,7 +6,7 @@
 #    By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/14 12:31:53 by pharbst           #+#    #+#              #
-#    Updated: 2026/03/16 23:45:09 by pharbst          ###   ########.fr        #
+#    Updated: 2026/03/17 05:04:36 by pharbst          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ OBJS	:=	$(SRCS:%.c=$(ODIR)/%.o)
 # **************************************************************************** #
 
 test:
-	$(CC) $(DEBUG_CFLAGS) src/parsing/arg_parser.c -o app
+	$(CC) $(DEBUG_CFLAGS) -I include src/parsing/*.c -o app
 	./app $(ARGS)
 
 clean:
