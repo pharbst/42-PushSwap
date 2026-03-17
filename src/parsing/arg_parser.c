@@ -6,7 +6,7 @@
 /*   By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 13:54:38 by pharbst           #+#    #+#             */
-/*   Updated: 2026/03/17 02:30:09 by pharbst          ###   ########.fr       */
+/*   Updated: 2026/03/17 04:17:13 by pharbst          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,8 @@ char *normalize_and_reduce(char *input) {
 			if (!strchr("0123456789", input[(index++) + 1]))
 				return (parse_error("Error1\n", (void*)input, NULL, NULL));
 		}
+		else if (i == 1)
+			index++;
 		if (input[index] == ' ')
 			index++;
 		// if (!strchr("\f\n\r\t\v ", input[index]))
@@ -228,6 +230,25 @@ bool _check_sorted(t_int_stack *int_stack) {
 	return (true);
 }
 
+int *ranker(t_int_stack *original) {
+	int			*copy;
+	size_t		lowest;
+	size_t		index;
+
+	copy = calloc(original->len + 1, sizeof(int));
+	if (!copy)
+		return (NULL);
+	index = 0;
+	while (index < original->len) {
+		lowest = 0;
+		while (lowest < original->len)
+			if (original->raw_stack[lowest++] < original->raw_stack[index])
+				copy[index]++;
+		copy[index++]++;
+	}
+	return (free(original->raw_stack), free(original), copy);
+}
+
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -235,6 +256,7 @@ int main(int argc, char **argv) {
 	t_int_stack	*int_stack;
 	int			elements;
 	int			return_value;
+	int			*ranked_stack;
 
 	if (argc > 2) {
 		// normalize and reduce input
@@ -250,6 +272,12 @@ int main(int argc, char **argv) {
 		if (_check_sorted(int_stack))
 			return (parse_error("Error stack sorted\n", NULL, NULL, (void*)&return_value));
 		printf("check sorted passed\n");
+		// switch the actual values with the final required index for working midpoint algo
+		ranked_stack = ranker(int_stack);
+		size_t index = 0;
+		printf("ranked stack:\n");
+		while (ranked_stack[index])
+			printf("%d\n", ranked_stack[index++]);
 	}
 	return (0);
 }
