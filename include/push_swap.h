@@ -6,7 +6,7 @@
 /*   By: pharbst <pharbst@student.42heilbronn.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 12:57:55 by pharbst           #+#    #+#             */
-/*   Updated: 2026/03/17 05:03:16 by pharbst          ###   ########.fr       */
+/*   Updated: 2026/03/17 15:26:35 by pharbst          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,29 @@ typedef struct s_int_stack {
 	int		*raw_stack;
 }	t_int_stack;
 
-typedef struct s_node {
-	unsigned int	index;
-	unsigned int	chunk_id;
-}	t_node;
-
 typedef struct s_stack {
-	t_node	*stack;
+	unsigned int	*ranked_stack;
+	size_t			size;
+	size_t			capacity;
+	size_t			head;
 }	t_stack;
+
+# define NEXT(i, cap) (((i) + 1) % (cap))
+# define PREV(i, cap) (((i) - 1 + (cap)) % (cap))
+
+enum operations{
+	PA,
+	PB,
+	SA,
+	SB,
+	SS,
+	RA,
+	RB,
+	RR,
+	RRA,
+	RRB,
+	RRR
+};
 
 // Function definitions
 char			*strjoin(char const *s1, char const *s2);
