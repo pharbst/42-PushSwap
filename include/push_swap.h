@@ -64,4 +64,17 @@ unsigned int	*ranker(t_int_stack *original);
 void			*parse_error(const char *error_msg, void *pointer_to_free, void **pointers_to_free, void *return_value);
 bool			_check_sorted(t_int_stack *int_stack);
 
+// Stackoperations
+bool			sa(t_stack *stack_a);
+bool			sb(t_stack *stack_b);
+bool			ss(t_stack *stack_a, t_stack *stack_b);
+bool			pa(t_stack *stack_a, t_stack *stack_b);
+bool			pb(t_stack *stack_a, t_stack *stack_b);
+bool			ra(t_stack *stack_a);
+bool			rb(t_stack *stack_b);
+bool			rr(t_stack *stack_a, t_stack *stack_b);
+bool			rra(t_stack *stack_a);
+bool			rrb(t_stack *stack_b);
+bool			rrr(t_stack *stack_a, t_stack *stack_b);
+
 #endif

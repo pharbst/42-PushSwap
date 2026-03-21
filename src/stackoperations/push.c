@@ -15,11 +15,11 @@ bool push(t_stack *dest, t_stack *src) {
 bool pa(t_stack *stack_a, t_stack *stack_b) {
 	if (push(stack_a, stack_b))
 		return (true);
-	return (add_operation(PA));
+	return (false);
 }
 
 bool pb(t_stack *stack_a, t_stack *stack_b) {
 	if (push(stack_b, stack_a))
 		return (true);
-	return (add_operation(PB));
+	return (false);
 }
