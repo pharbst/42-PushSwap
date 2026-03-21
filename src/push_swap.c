@@ -13,7 +13,32 @@
 #include <push_swap.h>
 
 int main(int argc, char **argv) {
-	if (argc < 2)
-		return (0);
-	stack_a = arg_parser(argc, argv);
+	char			*normalized;
+	t_int_stack		*int_stack;
+	int				elements;
+	int				return_value;
+	unsigned int	*ranked_stack;
+
+	if (argc > 2) {
+		// normalize and reduce input
+		normalized = normalize_input(argv);
+		printf("result:|%s|\n", normalized);
+		// int_stack creation
+		elements = count_spaces(normalized) + 1;
+		int_stack = create_raw_stack(normalized, elements);
+		while (elements--)
+			printf("%d\n", int_stack->raw_stack[int_stack->len - elements - 1]);
+		// validity check
+		return_value = 1;
+		if (_check_sorted(int_stack))
+			return (*(int*)parse_error("Error stack sorted\n", NULL, NULL, (void*)&return_value));
+		printf("check sorted passed\n");
+		// switch the actual values with the final required index for working midpoint algo
+		ranked_stack = ranker(int_stack);
+		size_t index = 0;
+		printf("ranked stack:\n");
+		while (ranked_stack[index])
+			printf("%d\n", ranked_stack[index++]);
+	}
+	return (0);
 }

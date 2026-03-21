@@ -114,8 +114,7 @@ char *normalize_and_reduce(char *input) {
 	return (input);
 }
 
-// Wrapper function creates a normalized string from argv
-char *normalize_input(char **argv) {
+char *input_parser(char **argv) {
 	char	*normalized_input;
 
 	normalized_input = normalize_and_reduce(ft_str_concat(&argv[1], " "));
