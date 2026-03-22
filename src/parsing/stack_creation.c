@@ -80,7 +80,8 @@ t_int_stack *create_raw_stack(char *input_string, int num_of_elements) {
 
 	// loop over string and extract one element convert it to int and put it into int_stack->raw_stack
 	// make it a function
-	insert_values(int_stack, input_string);
+	if (insert_values(int_stack, input_string))
+		return (NULL);
 	return (int_stack);
 }
 

@@ -18,14 +18,18 @@ int main(int argc, char **argv) {
 	int				elements;
 	int				return_value;
 	unsigned int	*ranked_stack;
+	int				ret_val;
 
+	ret_val = 1;
 	if (argc > 2) {
 		// normalize and reduce input
-		normalized = normalize_input(argv);
+		normalized = input_parser(argv);
 		printf("result:|%s|\n", normalized);
 		// int_stack creation
 		elements = count_spaces(normalized) + 1;
 		int_stack = create_raw_stack(normalized, elements);
+		if (!int_stack)
+			return (*(int*)parse_error("Error dublicate element\n", NULL, NULL, &ret_val));
 		while (elements--)
 			printf("%d\n", int_stack->raw_stack[int_stack->len - elements - 1]);
 		// validity check

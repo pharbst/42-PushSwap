@@ -17,7 +17,7 @@
 // Usage when returning pointer value
 // return (parse_error("Error\n", pointer_to_free, NULL))	// returns NULL
 // Usage when returning non pointer value
-// return (*parse_error("Error\n", pointer_to_free, &5))	// returns 5
+// return (*(datatype*)parse_error("Error\n", pointer_to_free, &5))	// returns 5
 void *parse_error(const char *error_msg, void *pointer_to_free, void **pointers_to_free, void *return_value) {
 	unsigned int	index;
 
@@ -39,8 +39,10 @@ bool _check_sorted(t_int_stack *int_stack) {
 	if (int_stack->len < 2)
 		return (true);
 	index = 1;
-	while (index < int_stack->len)
-		if (int_stack->raw_stack[index] < int_stack->raw_stack[(index++) - 1])
+	while (index < int_stack->len) {
+		if (int_stack->raw_stack[index] < int_stack->raw_stack[- 1 + index])
 			return (false);
+		index++;
+	}
 	return (true);
 }

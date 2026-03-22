@@ -9,6 +9,7 @@ bool swap(t_stack *stack) {
 	cache = stack->ranked_stack[stack->head];
 	stack->ranked_stack[stack->head] = stack->ranked_stack[NEXT(stack->head, stack->capacity)];
 	stack->ranked_stack[NEXT(stack->head, stack->capacity)] = cache;
+	return (false);
 }
 
 bool sa(t_stack *stack_a) {
