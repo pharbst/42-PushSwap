@@ -28,16 +28,24 @@ BNAME	:=	checker
 
 CC		:=	cc
 CFLAGS	:=	-Wall -Werror -Wextra
-DEBUG_CFLAGS	:=	-g
+CFLAGS	+=	-g
 # DEBUG_CFLAGS	+=	-fsanatize=address
 
 HEADER_DIR	:=	./include
 HEADER		:=	push_swap.h
 
-include		:=	-I $(HEADER_DIR)
+INCLUDE		:=	-I $(HEADER_DIR)
 
-VPATH		:=	src parsing algorythm stackoperations
+VPATH		:=	src src/parsing src/algorythm src/stackoperations
 
+SRCS		:=	push_swap.c \
+				parser_helper.c \
+				reduce_normalize.c \
+				stack_creation.c \
+				push.c \
+				rotate.c \
+				rev_rotate.c \
+				swap.c
 
 ODIR	:=	obj
 OBJS	:=	$(SRCS:%.c=$(ODIR)/%.o)
@@ -46,9 +54,21 @@ OBJS	:=	$(SRCS:%.c=$(ODIR)/%.o)
 # Compilation Rules
 # **************************************************************************** #
 
-test:
-	$(CC) $(DEBUG_CFLAGS) -I include src/parsing/*.c -o app
-	./app $(ARGS)
+# test:
+# 	$(CC) $(DEBUG_CFLAGS) $(INCLUDE) src/parsing/*.c -o app
+# 	./app $(ARGS)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDE) $(OBJS) -o $(NAME)
+
+
+$(ODIR)/%.o: %.c | $(ODIR)
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+$(ODIR):
+	@mkdir -p $@
 
 clean:
 	@$(MAKE) -s proname_header
@@ -72,7 +92,7 @@ cleanator:
 re:
 	@$(MAKE) -s proname_header
 	@$(MAKE) -s cleanator
-	@$(MAKE) -s std_all
+	@$(MAKE) -s all
 
 # **************************************************************************** #
 # Header Rules                                                                 #
