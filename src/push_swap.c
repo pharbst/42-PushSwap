@@ -43,6 +43,8 @@ int main(int argc, char **argv) {
 		printf("ranked stack:\n");
 		while (ranked_stack[index])
 			printf("%d\n", ranked_stack[index++]);
+		printf("starting to sort...\n");
+		
 	}
 	return (0);
 }

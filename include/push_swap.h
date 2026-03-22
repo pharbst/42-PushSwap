@@ -34,6 +34,20 @@ typedef struct s_stack {
 	size_t			head;
 }	t_stack;
 
+typedef struct s_chunk {
+	unsigned int	min;
+	unsigned int	max;
+	union pivot {
+		float			f_pivot;
+		unsigned int	ui_pivot; // median / midpoint within the chunk
+	};
+	
+	bool			lives_on;
+}	t_chunk;
+
+# define STACK_A true
+# define STACK_B false
+
 # define NEXT(i, cap) (((i) + 1) % (cap))
 # define PREV(i, cap) (((i) - 1 + (cap)) % (cap))
 
@@ -55,7 +69,7 @@ enum operations{
 char			*strjoin(char const *s1, char const *s2);
 char			*ft_str_concat(char **to_concat, char *seperator);
 char			*normalize_and_reduce(char *input);
-char			*normalize_input(char **argv);
+char			*input_parser(char **argv);
 int				count_spaces(char *input);
 void			isolate_element(char *input_string, size_t *index, int *to_insert, size_t *sub_index);
 bool			insert_values(t_int_stack *int_stack, char *input_string);
