@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
 	char			*normalized;
 	t_int_stack		*int_stack;
 	int				elements;
+	int				elements_cpy;
 	int				return_value;
 	unsigned int	*ranked_stack;
 	int				ret_val;
@@ -27,11 +28,13 @@ int main(int argc, char **argv) {
 		printf("result:|%s|\n", normalized);
 		// int_stack creation
 		elements = count_spaces(normalized) + 1;
+		elements_cpy = elements;
 		int_stack = create_raw_stack(normalized, elements);
 		if (!int_stack)
 			return (*(int*)parse_error("Error dublicate element\n", NULL, NULL, &ret_val));
 		while (elements--)
 			printf("%d\n", int_stack->raw_stack[int_stack->len - elements - 1]);
+		elements = elements_cpy;
 		// validity check
 		return_value = 1;
 		if (_check_sorted(int_stack))
@@ -41,7 +44,7 @@ int main(int argc, char **argv) {
 		ranked_stack = ranker(int_stack);
 		size_t index = 0;
 		printf("ranked stack:\n");
-		while (ranked_stack[index])
+		while (elements--)
 			printf("%d\n", ranked_stack[index++]);
 		printf("starting to sort...\n");
 		
