@@ -75,14 +75,46 @@ t_stack *join_op_list(unsigned int to_join, bool just_read) {
 	return (NULL);
 }
 
+bool element_to_push_top(t_chunk job, t_stack *stack) {
+	size_t	index;
+
+	index = 0;
+	while (PART_OF(job, )) {
+
+	}
+}
+
+bool element_to_push_bot(t_chunk job, t_stack *stack) {
+
+}
+
+// This actualy executes the job
+// First push from top then from bot
+// This needs optimization (only rotate / rev rotate when there are actual elements to push)
 void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	if (job.lives_on == STACK_A) {
-		// rotate & push from top first
-		// rev rotate & push
+		while (element_to_push_top(job, stack_a) && TOP(stack_a) <= job.max && TOP(stack_a) >= job.min) {
+			if (TOP(stack_a) < job.pivot && TOP(stack_a) >= job.min)
+				join_op_list(pb(stack_a, stack_b), false);
+			join_op_list(ra(stack_a), false);
+		}
+		while (element_to_push_bot(job, stack_a) && BOT(stack_a) <= job.max && BOT(stack_a) >= job.min) {
+			join_op_list(rra(stack_a), false);
+			if (TOP(stack_a) < job.pivot && TOP(stack_a) >= job.min)
+				join_op_list(pb(stack_a, stack_b), false);
+		}
 	}
 	else if (job.lives_on == STACK_B) {
-		// same logic here
-		// only change instead of push < pivot, we push > pivot
+		while (element_to_push_top(job, stack_b) && TOP(stack_b) <= job.max && TOP(stack_b) >= job.min) {
+			if (TOP(stack_b) <= job.max && TOP(stack_b) > job.pivot)
+				join_op_list(pa(stack_a, stack_b), false);
+			join_op_list(rb(stack_b), false);
+		}
+		while (element_to_push_bot(job, stack_b) && BOT(stack_b) <= job.max && BOT(stack_b) >= job.min) {
+			join_op_list(rrb(stack_b), false);
+			if (TOP(stack_b) <= job.max && TOP(stack_b) > job.pivot)
+				join_op_list(pa(stack_a, stack_b), false);
+		}
 	}
 }
 
@@ -100,21 +132,18 @@ void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b, bool lives_on)
 		if (!issorted(stack_a))
 			return;
 		// rev rotate the chunk elements from bottom to top. This works for both fragmentation cases
-		while (stack_a->ranked_stack[PREV(stack_a->head, stack_a->capacity)] <= job.max
-			&& stack_a->ranked_stack[PREV(stack_a->head, stack_a->capacity)] >= job.min) {
+		while (BOT(stack_a) <= job.max && BOT(stack_a) >= job.min) {
 			join_op_list(rra(stack_a), false);
 		}
 	}
 	// chunk is located on stack b
 	else if (lives_on == STACK_B) {
 		// rev rotate chunk elements from bottom to top. This works for both fragmentation cases
-		while (stack_b->ranked_stack[PREV(stack_b->head, stack_b->capacity)] <= job.max
-			&& stack_b->ranked_stack[PREV(stack_b->head, stack_b->capacity)] >= job.min) {
+		while (BOT(stack_b) <= job.max && BOT(stack_b) >= job.min) {
 			join_op_list(rrb(stack_b), false);
 		}
 		// after all chunk elements are at the top, push them to stack a
-		while (stack_b->ranked_stack[stack_b->head] <= job.max
-			&& stack_b->ranked_stack[stack_b->head] >= job.min) {
+		while (TOP(stack_b) <= job.max && TOP(stack_b) >= job.min) {
 			join_op_list(pa(stack_a, stack_b), false);
 		}
 	}

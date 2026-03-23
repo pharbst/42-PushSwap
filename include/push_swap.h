@@ -41,11 +41,19 @@ typedef struct s_chunk {
 	bool			lives_on;
 }	t_chunk;
 
+// for lives_on parameter
 # define STACK_A true
 # define STACK_B false
 
-# define NEXT(i, cap) (((i) + 1) % (cap))
-# define PREV(i, cap) (((i) - 1 + (cap)) % (cap))
+# define NEXT(stack) ((((stack)->head) + 1) % ((stack)->capacity))
+# define PREV(stack) (((stack)->head - 1 + (stack)->capacity) % (stack)->capacity)
+# define TOP(stack) ((stack)->ranked_stack[(stack)->head])
+# define BOT(stack) ((stack)->ranked_stack[PREV((stack))])
+# define PART_OF(job, element) ((element) >= (job).min && (element) <= (job).max)
+# define BELOW_PIVOT(job, element) ((element) >= (job).min && (element) < (job).pivot)
+# define ABOVE_PIVOT(job, element) ((element) > (job).pivot && (element) <= (job).max)
+// get specific element using the index positive and negative index is possible (-1 is the same as BOT())
+# define ELEMENT(stack, index) ((stack)->ranked_stack[(((stack)->head + ((index) % (stack)->capacity)) + (stack)->capacity) % (stack)->capacity])
 
 enum operations{
 	PA = 1,
