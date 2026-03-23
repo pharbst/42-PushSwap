@@ -37,11 +37,7 @@ typedef struct s_stack {
 typedef struct s_chunk {
 	unsigned int	min;
 	unsigned int	max;
-	union pivot {
-		float			f_pivot;
-		unsigned int	ui_pivot; // median / midpoint within the chunk
-	};
-	
+	unsigned int	pivot;
 	bool			lives_on;
 }	t_chunk;
 
