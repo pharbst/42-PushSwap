@@ -70,40 +70,76 @@ t_stack *join_op_list(unsigned int to_join, bool just_read) {
 		op_list = calloc(old_list->capacity + 1000, sizeof(unsigned int));
 		free(old_list);
 	}
-	// join operation to stack
+	if (to_join != 0)
+		op_list->ranked_stack[op_list->size++] = to_join;
 	return (NULL);
 }
 
-void execute_job() {
-
+void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
+	if (job.lives_on == STACK_A) {
+		// rotate & push from top first
+		// rev rotate & push
+	}
+	else if (job.lives_on == STACK_B) {
+		// same logic here
+		// only change instead of push < pivot, we push > pivot
+	}
 }
 
-void direct_sort() {
-
+// function to sort chunk with just 2 elements
+// when lives_on stack a check if stack a is already sorted
+// when lives on stack b push both to stack a and swap if nesessary
+// possible fragmentations:
+// both elements at the bottom
+// both elements at the top
+// one element at top one at bottom
+void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b, bool lives_on) {
+	// chunk is located on stack a already
+	if (lives_on == STACK_A) {
+		// if they are already in correct order we do nothing
+		if (!issorted(stack_a))
+			return;
+		// rev rotate the chunk elements from bottom to top. This works for both fragmentation cases
+		while (stack_a->ranked_stack[PREV(stack_a->head, stack_a->capacity)] <= job.max
+			&& stack_a->ranked_stack[PREV(stack_a->head, stack_a->capacity)] >= job.min) {
+			join_op_list(rra(stack_a), false);
+		}
+	}
+	// chunk is located on stack b
+	else if (lives_on == STACK_B) {
+		// rev rotate chunk elements from bottom to top. This works for both fragmentation cases
+		while (stack_b->ranked_stack[PREV(stack_b->head, stack_b->capacity)] <= job.max
+			&& stack_b->ranked_stack[PREV(stack_b->head, stack_b->capacity)] >= job.min) {
+			join_op_list(rrb(stack_b), false);
+		}
+		// after all chunk elements are at the top, push them to stack a
+		while (stack_b->ranked_stack[stack_b->head] <= job.max
+			&& stack_b->ranked_stack[stack_b->head] >= job.min) {
+			join_op_list(pa(stack_a, stack_b), false);
+		}
+	}
+	// last but not least, check if elements have to be swapped
+	if (issorted(stack_a))
+		join_op_list(sa(stack_a), false);
 }
 
 void sort(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	if (job.lives_on == STACK_A) {
-		if (job.max - job.min > 1) { // is chunk larger than 2 elements
+		if (job.max - job.min > 1) { // chunk is larger than 2 elements
 			execute_job(job, stack_a, stack_b);
 			sort(create_job(job, STACK_A), stack_a, stack_b);
 			sort(create_job(job, STACK_B), stack_a, stack_b);
 		}
 		else
-			direct_sort(stack_a, stack_b);
-			// direct sort
+			direct_sort(job, stack_a, stack_b, STACK_A);
 	}
 	else if (job.lives_on == STACK_B) {
 		if (job.max - job.min > 1) { // chunk is larger than 2 elements
-			// push above pivot
 			execute_job(job, stack_a, stack_b);
 			sort(create_job(job, STACK_A), stack_a, stack_b);
 			sort(create_job(job, STACK_B), stack_a, stack_b);
 		}
-		else {
-			// push chunk to a
-			execute_job(job, stack_a, stack_b);
-			sort(create_job(job, STACK_A), stack_a, stack_b);
-		}
+		else
+			direct_sort(job, stack_a, stack_b, STACK_B);
 	}
 }
