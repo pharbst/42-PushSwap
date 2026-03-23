@@ -8,17 +8,21 @@ bool rotate(t_stack *stack) {
 	return (false);
 }
 
-bool ra(t_stack *stack_a) {
-	return (rotate(stack_a));
+int ra(t_stack *stack_a) {
+	if (rotate(stack_a))
+		return (0);
+	return (RA);
 }
 
-bool rb(t_stack *stack_b) {
-	return (rotate(stack_b));
+int rb(t_stack *stack_b) {
+	if (rotate(stack_b))
+		return (0);
+	return (RB);
 }
 
-bool rr(t_stack *stack_a, t_stack *stack_b) {
+int rr(t_stack *stack_a, t_stack *stack_b) {
 	if (stack_a->size < 2 || stack_b->size < 2)
-		return (true);
-	return (rotate(stack_a), rotate(stack_b), false);
+		return (0);
+	return (rotate(stack_a), rotate(stack_b), RR);
 }
 

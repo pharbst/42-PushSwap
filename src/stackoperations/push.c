@@ -12,14 +12,14 @@ bool push(t_stack *dest, t_stack *src) {
 	return (false);
 }
 
-bool pa(t_stack *stack_a, t_stack *stack_b) {
+int pa(t_stack *stack_a, t_stack *stack_b) {
 	if (push(stack_a, stack_b))
-		return (true);
-	return (false);
+		return (0);
+	return (PA);
 }
 
-bool pb(t_stack *stack_a, t_stack *stack_b) {
+int pb(t_stack *stack_a, t_stack *stack_b) {
 	if (push(stack_b, stack_a))
-		return (true);
-	return (false);
+		return (0);
+	return (PB);
 }

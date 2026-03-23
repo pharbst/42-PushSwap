@@ -12,16 +12,20 @@ bool swap(t_stack *stack) {
 	return (false);
 }
 
-bool sa(t_stack *stack_a) {
-	return (swap(stack_a));
+int sa(t_stack *stack_a) {
+	if (swap(stack_a))
+		return (0);
+	return (SA);
 }
 
-bool sb(t_stack *stack_b) {
-	return (swap(stack_b));
+int sb(t_stack *stack_b) {
+	if (swap(stack_b))
+		return (0);
+	return (SB);
 }
 
-bool ss(t_stack *stack_a, t_stack *stack_b) {
+int ss(t_stack *stack_a, t_stack *stack_b) {
 	if (stack_a->size < 2 || stack_b->size < 2)
-		return (true);
-	return (sa(stack_a), sb(stack_b), false);
+		return (0);
+	return (sa(stack_a), sb(stack_b), SS);
 }

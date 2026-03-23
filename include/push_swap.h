@@ -48,7 +48,7 @@ typedef struct s_chunk {
 # define PREV(i, cap) (((i) - 1 + (cap)) % (cap))
 
 enum operations{
-	PA,
+	PA = 1,
 	PB,
 	SA,
 	SB,
@@ -75,16 +75,19 @@ void			*parse_error(const char *error_msg, void *pointer_to_free, void **pointer
 bool			_check_sorted(t_int_stack *int_stack);
 
 // Stackoperations
-bool			sa(t_stack *stack_a);
-bool			sb(t_stack *stack_b);
-bool			ss(t_stack *stack_a, t_stack *stack_b);
-bool			pa(t_stack *stack_a, t_stack *stack_b);
-bool			pb(t_stack *stack_a, t_stack *stack_b);
-bool			ra(t_stack *stack_a);
-bool			rb(t_stack *stack_b);
-bool			rr(t_stack *stack_a, t_stack *stack_b);
-bool			rra(t_stack *stack_a);
-bool			rrb(t_stack *stack_b);
-bool			rrr(t_stack *stack_a, t_stack *stack_b);
+// change return type to return operation enum (int)
+int				sa(t_stack *stack_a);
+int				sb(t_stack *stack_b);
+int				ss(t_stack *stack_a, t_stack *stack_b);
+int				pa(t_stack *stack_a, t_stack *stack_b);
+int				pb(t_stack *stack_a, t_stack *stack_b);
+int				ra(t_stack *stack_a);
+int				rb(t_stack *stack_b);
+int				rr(t_stack *stack_a, t_stack *stack_b);
+int				rra(t_stack *stack_a);
+int				rrb(t_stack *stack_b);
+int				rrr(t_stack *stack_a, t_stack *stack_b);
+
+void			sort(t_chunk job, t_stack *stack_a, t_stack *stack_b);
 
 #endif
