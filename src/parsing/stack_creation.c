@@ -102,7 +102,7 @@ unsigned int *ranker(t_int_stack *original) {
 		while (lowest < original->len)
 			if (original->raw_stack[lowest++] < original->raw_stack[index])
 				copy[index]++;
-		copy[index++]++;
+		index++;
 	}
 	return (free(original->raw_stack), free(original), copy);
 }
