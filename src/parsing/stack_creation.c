@@ -29,7 +29,7 @@ int count_spaces(char *input) {
 
 void isolate_element(char *input_string, size_t *index, int *to_insert, size_t *sub_index) {
 	*sub_index = 0;
-	while (strchr("+-0123456789", input_string[*index + *sub_index]))
+	while (input_string[*index + *sub_index] && strchr("+-0123456789", input_string[*index + *sub_index]))
 		(*sub_index)++;
 	if (input_string[*index + *sub_index]) {
 		input_string[*index + *sub_index] = '\0';

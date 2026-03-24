@@ -45,6 +45,7 @@ typedef struct s_chunk {
 # define STACK_A true
 # define STACK_B false
 
+# define JOB_SIZE(job) ((job).max - (job).min + 1)
 # define NEXT(stack) ((((stack)->head) + 1) % ((stack)->capacity))
 # define PREV(stack) (((stack)->head - 1 + (stack)->capacity) % (stack)->capacity)
 # define TOP(stack) ((stack)->ranked_stack[(stack)->head])
@@ -54,6 +55,7 @@ typedef struct s_chunk {
 # define ABOVE_PIVOT(job, element) ((element) > (job).pivot && (element) <= (job).max)
 // get specific element using the index positive and negative index is possible (-1 is the same as BOT())
 # define ELEMENT(stack, index) ((stack)->ranked_stack[(((stack)->head + ((index) % (stack)->capacity)) + (stack)->capacity) % (stack)->capacity])
+# define PUSHABLE(job, element) ()
 
 enum operations{
 	PA = 1,
@@ -69,7 +71,9 @@ enum operations{
 	RRR
 };
 
-// Function definitions
+t_stack *join_op_list(unsigned int to_join, bool just_read);
+
+// Parsing
 char			*strjoin(char const *s1, char const *s2);
 char			*ft_str_concat(char **to_concat, char *seperator);
 char			*normalize_and_reduce(char *input);
@@ -83,7 +87,6 @@ void			*parse_error(const char *error_msg, void *pointer_to_free, void **pointer
 bool			_check_sorted(t_int_stack *int_stack);
 
 // Stackoperations
-// change return type to return operation enum (int)
 int				sa(t_stack *stack_a);
 int				sb(t_stack *stack_b);
 int				ss(t_stack *stack_a, t_stack *stack_b);
@@ -96,6 +99,7 @@ int				rra(t_stack *stack_a);
 int				rrb(t_stack *stack_b);
 int				rrr(t_stack *stack_a, t_stack *stack_b);
 
+// Algorythm
 void			sort(t_chunk job, t_stack *stack_a, t_stack *stack_b);
 
 #endif

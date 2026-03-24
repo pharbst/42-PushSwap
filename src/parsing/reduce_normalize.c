@@ -85,7 +85,7 @@ char *normalize_and_reduce(char *input) {
 		return (input);
 	index = 0;
 
-	while (strchr("\f\n\r\t\v 0123456789+-", input[index]) && index <= strlen(input)) {
+	while (strchr("\f\n\r\t\v 0123456789+-", input[index]) && index < strlen(input)) {
 		// skip digits
 		if (strchr("0123456789", input[index])) {
 			index++;
