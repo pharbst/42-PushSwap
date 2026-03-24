@@ -37,46 +37,57 @@ t_stack *join_op_list(unsigned int to_join, bool just_read) {
 	return (NULL);
 }
 
-bool element_to_push_top(t_chunk job, t_stack *stack) {
-	size_t	index;
-
-	index = 0;
-	while (PART_OF(job, )) {
-
+bool top_is_cheaper(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
+	if (job.lives_on == STACK_A) {
+		// count non pushable at top and bot for stacka
+		// return true if top is less then bottom
+	}
+	else if (job.lives_on == STACK_B) {
+		// count non pushable at top and bot for stackb
+		// return true if top is less than bottom
 	}
 }
 
-bool element_to_push_bot(t_chunk job, t_stack *stack) {
+void rotate_and_push(t_chunk job, t_stack *stack_a, t_stack *stack_b, void *push_fn(t_stack *stack_a, t_stack *stack_b), void *rotate_fn(t_stack *stack)) {
+	size_t	to_push;
 
-}
-
-// rewrite function
-// count non pushable elements to the last element to push from both directions
-// if top non pushable elements < bot pushable elements start with top
-// otherwise start with bottom
-void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
-	if (job.lives_on == STACK_A) {
+	if (rotate_fn == &ra || rotate_fn == &rra) {
+		// to_push = count_elements_to_push(job, stack_a, stack_b, TOP);
 		while (/*is there an element to push?*/ PART_OF(job, TOP(stack_a))) {
 			if (TOP(stack_a) < job.pivot && TOP(stack_a) >= job.min)
-				join_op_list(pb(stack_a, stack_b), false);
-			join_op_list(ra(stack_a), false);
+				join_op_list(push_fn(stack_a, stack_b), false);
+			join_op_list(rotate_fn(stack_a), false);
 		}
-		while (/*is there an element to push?*/ PART_OF(job, BOT(stack_a))) {
-			join_op_list(rra(stack_a), false);
+	}
+	else if (rotate_fn == &rra || rotate_fn == &rrb) {
+		// to_push = count_elements_to_push(job, stack_a, stack_b, BOT)
+		while (/*is there an element to push?*/ PART_OF(job, TOP(stack_a))) {
+			join_op_list(rotate_fn(stack_a), false);
 			if (TOP(stack_a) < job.pivot && TOP(stack_a) >= job.min)
-				join_op_list(pb(stack_a, stack_b), false);
+				join_op_list(push_fn(stack_a, stack_b), false);
+		}
+	}
+}
+
+void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
+	if (job.lives_on == STACK_A) {
+		if (top_is_ceaper(job, stack_a, stack_b)) {
+			rotate_and_push(job, stack_a, stack_b, &pb, &ra);
+			rotate_and_push(job, stack_a, stack_b, &pb, &rra);
+		}
+		else {
+			rotate_and_push(job, stack_a, stack_b, &pb, &rra);
+			rotate_and_push(job, stack_a, stack_b, &pb, &ra);
 		}
 	}
 	else if (job.lives_on == STACK_B) {
-		while (/*is there an element to push?*/ PART_OF(job, TOP(stack_b))) {
-			if (TOP(stack_b) <= job.max && TOP(stack_b) > job.pivot)
-				join_op_list(pa(stack_a, stack_b), false);
-			join_op_list(rb(stack_b), false);
+		if (top_is_cheaper(job, stack_a, stack_b)) {
+			rotate_and_push(job, stack_a, stack_b, &pa, &rb);
+			rotate_and_push(job, stack_a, stack_b, &pa, &rrb);
 		}
-		while (/*is there an element to push?*/ PART_OF(job, BOT(stack_b))) {
-			join_op_list(rrb(stack_b), false);
-			if (TOP(stack_b) <= job.max && TOP(stack_b) > job.pivot)
-				join_op_list(pa(stack_a, stack_b), false);
+		else {
+			rotate_and_push(job, stack_a, stack_b, &pa, &rrb);
+			rotate_and_push(job, stack_a, stack_b, &pa, &rb);
 		}
 	}
 }
