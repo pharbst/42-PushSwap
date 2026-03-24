@@ -7,8 +7,8 @@ bool swap(t_stack *stack) {
 	if (stack->size < 2)
 		return (true);
 	cache = stack->ranked_stack[stack->head];
-	stack->ranked_stack[stack->head] = stack->ranked_stack[NEXT(stack->head, stack->capacity)];
-	stack->ranked_stack[NEXT(stack->head, stack->capacity)] = cache;
+	stack->ranked_stack[stack->head] = stack->ranked_stack[NEXT(stack)];
+	stack->ranked_stack[NEXT(stack)] = cache;
 	return (false);
 }
 

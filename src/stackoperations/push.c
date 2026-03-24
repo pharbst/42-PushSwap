@@ -4,10 +4,10 @@
 bool push(t_stack *dest, t_stack *src) {
 	if (dest->size == dest->capacity || src->size == 0)
 		return (true);
-	dest->head = NEXT(dest->head, dest->capacity);
+	dest->head = NEXT(dest);
 	dest->ranked_stack[dest->head] = src->ranked_stack[src->head];
 	dest->size++;
-	src->head = PREV(src->head, src->capacity);
+	src->head = PREV(src);
 	src->size--;
 	return (false);
 }

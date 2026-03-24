@@ -4,7 +4,7 @@
 bool rev_rotate(t_stack *stack) {
 	if (stack->size < 2)
 		return (true);
-	stack->head = PREV(stack->head, stack->capacity);
+	stack->head = PREV(stack);
 	return (false);
 }
 

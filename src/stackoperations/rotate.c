@@ -4,7 +4,7 @@
 bool rotate(t_stack *stack) {
 	if (stack->size < 2)
 		return (true);
-	stack->head = NEXT(stack->head, stack->capacity);
+	stack->head = NEXT(stack);
 	return (false);
 }
 
