@@ -145,7 +145,11 @@ void rotate_and_push(t_chunk job, t_stack *stack_a, t_stack *stack_b, int push_f
 }
 
 void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
-	if (job.lives_on == STACK_A) {
+	if (job.lives_on == STACK_A && /*there is just one chunk on stack a*/) {
+		
+	}
+	else if (job.lives_on == STACK_A) {
+		// needs edge case when there is only one chunk on stack a
 		if (top_is_cheaper(job, stack_a)) {
 			rotate_and_push(job, stack_a, stack_b, &pb, &ra);
 			rotate_and_push(job, stack_a, stack_b, &pb, &rra);

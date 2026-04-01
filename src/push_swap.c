@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
 		stack_a->ranked_stack = ranked_stack;
 		stack_b->capacity = elements_cpy;
 		stack_b->ranked_stack = calloc(elements_cpy + 1, sizeof(unsigned int));
+		// "edge case" first cycle stack a is just one chunk therefore the rotate push function is the problem it runs twice cause there is no chunk in the middle that does not belong to the jobs chunk
 		sort(init_job, stack_a, stack_b);
 		t_stack *operations = join_op_list(0, true);
 		index = 0;

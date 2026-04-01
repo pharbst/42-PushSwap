@@ -45,7 +45,8 @@ SRCS		:=	push_swap.c \
 				push.c \
 				rotate.c \
 				rev_rotate.c \
-				swap.c
+				swap.c \
+				midpoint.c
 
 ODIR	:=	obj
 OBJS	:=	$(SRCS:%.c=$(ODIR)/%.o)
