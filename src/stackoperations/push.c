@@ -7,8 +7,6 @@ bool push(t_stack *dest, t_stack *src) {
 	dest->size++;
 	memmove(&ELEMENT(dest, 1), &ELEMENT(dest, 0), (dest->size - dest->head) * sizeof(__int64_t));
 	ELEMENT(dest, 0) = ELEMENT(src, 0);
-	// printf("dest: %p, src: %p, n: %ld\n", &ELEMENT(src, 0), &ELEMENT(src, 1), (src->size - src->head - 1) * sizeof(__int64_t));
-	// fflush(stdout);
 	memmove(&ELEMENT(src, 0), &ELEMENT(src, 1), (src->size - src->head - 1) * sizeof(__int64_t));
 	src->size--;
 	if (src->size)

@@ -82,7 +82,6 @@ enum operations{
 	RRR
 };
 
-t_stack *join_op_list(__int64_t to_join, bool just_read);
 
 // Parsing
 char			*strjoin(char const *s1, char const *s2);
@@ -112,5 +111,8 @@ int				rrr(t_stack *stack_a, t_stack *stack_b);
 
 // Algorythm
 void			sort(t_chunk job, t_stack *stack_a, t_stack *stack_b);
+
+// Tool
+t_stack			*join_op_list(__int64_t to_join, bool just_read);
 
 #endif

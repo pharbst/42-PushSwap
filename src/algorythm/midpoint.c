@@ -35,6 +35,8 @@ t_stack *join_op_list(__int64_t to_join, bool just_read) {
 	static t_stack	op_list;
 	t_stack			old_list;
 
+	if (op_list.size == 1000)
+		printf("here\n");
 	if (just_read)
 		return (&op_list);
 	if (!op_list.ranked_stack) {
@@ -42,9 +44,10 @@ t_stack *join_op_list(__int64_t to_join, bool just_read) {
 		op_list.capacity = 1000;
 	}
 	if (op_list.size == op_list.capacity) {
-		old_list.ranked_stack = op_list.ranked_stack;
+		old_list = op_list;
 		op_list.ranked_stack = calloc(op_list.capacity + 1000, sizeof(__int64_t));
 		op_list.capacity += 1000;
+		memcpy(op_list.ranked_stack, old_list.ranked_stack, old_list.size * 8);
 		free(old_list.ranked_stack);
 	}
 	if (to_join != 0)
@@ -161,7 +164,6 @@ void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	}
 }
 
-// last push from stack_b is missing and therefore the last check for stack_a
 void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	__int64_t	index;
 
