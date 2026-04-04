@@ -48,7 +48,7 @@ typedef struct s_chunk {
 # define STACK_B false
 
 // second index
-# define NEXT(stack) ((stack)->head + 1 % (stack)->size)
+# define NEXT(stack) (((stack)->head + 1) % (stack)->size)
 // last index
 # define PREV(stack) ((((stack)->head - 1) + (stack)->size) % (stack)->size)
 // top element

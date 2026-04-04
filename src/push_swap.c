@@ -12,6 +12,16 @@
 
 #include <push_swap.h>
 
+
+void print_stack(t_stack *stack) {
+	__int64_t	index;
+
+	index = 0;
+	printf("printing stack:\n");
+	while (index < stack->size)
+		printf("%ld\n", ELEMENT(stack, index++));
+}
+
 int main(int argc, char **argv) {
 	char		*normalized;
 	t_int_stack	*int_stack;
@@ -45,7 +55,7 @@ int main(int argc, char **argv) {
 		// printf("check sorted passed\n");
 		// switch the actual values with the final required index for working midpoint algo
 		ranked_stack = ranker(int_stack);
-		__int64_t index = 0;
+		// __int64_t index = 0;
 		// printf("ranked stack:\n");
 		// while (elements--)
 		// 	printf("%ld\n", ranked_stack[index++]);
@@ -66,6 +76,17 @@ int main(int argc, char **argv) {
 		stack_b->ranked_stack = calloc(elements_cpy + 1, sizeof(__int64_t));
 		// "edge case" first cycle stack a is just one chunk therefore the rotate push function is the problem it runs twice cause there is no chunk in the middle that does not belong to the jobs chunk
 		sort(init_job, stack_a, stack_b);
+		// printf("stack a:\tstack b:\n");
+		__int64_t index = 0;
+		// while (index < stack_a->size || index < stack_b->size) {
+		// 	if (index < stack_a->size)
+		// 		printf("%ld", ELEMENT(stack_a, index));
+		// 	if (index < stack_b->size)
+		// 		printf("\t\t%ld\n", ELEMENT(stack_b, index));
+		// 	else
+		// 		printf("\n");
+		// 	index++;
+		// }
 		t_stack *operations = join_op_list(0, true);
 		index = 0;
 		while (index < operations->size)
@@ -98,5 +119,6 @@ int main(int argc, char **argv) {
 			index++;
 		}
 	}
+	printf("pa\n");
 	return (0);
 }

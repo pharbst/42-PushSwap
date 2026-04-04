@@ -1,15 +1,6 @@
 
 # include <push_swap.h>
 
-void print_stack(t_stack *stack) {
-	__int64_t	index;
-
-	index = 0;
-	printf("printing stack:\n");
-	while (index < stack->size)
-		printf("%ld\n", ELEMENT(stack, index++));
-}
-
 static inline bool issorted(t_stack *stack) {
 	__int64_t	index;
 
@@ -61,18 +52,6 @@ t_stack *join_op_list(__int64_t to_join, bool just_read) {
 	return (NULL);
 }
 
-// static inline bool	PUSHABLE(t_chunk job, unsigned int element)
-// {
-// 	if (job.lives_on == STACK_A)
-// 		return (element >= job.min && element <= job.pivot);
-// 	else
-// 		return (element > job.pivot && element <= job.max);
-// }
-
-// here is some logic error
-// top is cheaper must find the last pushable from top
-// then count the elements that are not pushable on the way back to the top
-// then the same from the bottom
 bool top_is_cheaper(t_chunk job, t_stack *stack) {
 	__int64_t	index;
 	__int64_t	not_pushable_top;
@@ -91,7 +70,6 @@ bool top_is_cheaper(t_chunk job, t_stack *stack) {
 			not_pushable_top++;
 
 	index = 1;
-	// printf("-index: %d")
 	while (PART_OF(job, ELEMENT(stack, -index)) && index <= stack->size)
 		index++;
 	while (--index >= 0 && !PUSHABLE(job, ELEMENT(stack, -index)))
@@ -109,7 +87,6 @@ __int64_t count_elements_to_push(t_chunk job, t_stack *stack, bool top) {
 	__int64_t	index;
 	__int64_t	pushable_elements;
 
-	print_stack(stack);
 	index = 0;
 	pushable_elements = 0;
 	if (top) {
@@ -120,10 +97,7 @@ __int64_t count_elements_to_push(t_chunk job, t_stack *stack, bool top) {
 		}
 	}
 	else {
-		// index is wrong cause -index is resolving before - 1. so the question is what index do i need here?
-		while (PART_OF(job, ELEMENT(stack, index - 1)) && -index - 1 < stack->size) {
-			printf("index: %ld\n", -index - 1);
-			// printf("ELEMENT: %ld\n", ELEMENT(stack, index - 1));
+		while (PART_OF(job, ELEMENT(stack, index - 1)) && -index < stack->size) {
 			if (PUSHABLE(job, ELEMENT(stack, index - 1)))
 				pushable_elements++;
 			index--;
@@ -162,11 +136,6 @@ void rotate_and_push(t_chunk job, t_stack *stack_a, t_stack *stack_b, int push_f
 			}
 		}
 	}
-	printf("after rotate and push:\n");
-	printf("stack a:\n");
-	print_stack(stack_a);
-	printf("stack b:\n");
-	print_stack(stack_b);
 }
 
 void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
@@ -192,11 +161,10 @@ void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	}
 }
 
-void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b, bool lives_on) {
+void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	int	index;
 
-	print_stack(stack_a);
-	if (lives_on == STACK_A) {
+	if (job.lives_on == STACK_A) {
 		if (!issorted(stack_a))
 			return;
 		index = 0;
@@ -204,7 +172,7 @@ void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b, bool lives_on)
 			join_op_list(rra(stack_a), false);
 		}
 	}
-	else if (lives_on == STACK_B) {
+	else if (job.lives_on == STACK_B) {
 		index = 0;
 		while (PART_OF(job, BOT(stack_b)) && index++ < (int)stack_b->size)
 			join_op_list(rrb(stack_b), false);
@@ -217,22 +185,11 @@ void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b, bool lives_on)
 }
 
 void sort(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
-	if (job.lives_on == STACK_A) {
-		if (JOB_SIZE(job) > 2) { // chunk is larger than 2 elements
-			execute_job(job, stack_a, stack_b);
-			sort(create_job(job, STACK_A), stack_a, stack_b);
-			sort(create_job(job, STACK_B), stack_a, stack_b);
-		}
-		else
-			direct_sort(job, stack_a, stack_b, STACK_A);
+	if (JOB_SIZE(job) > 2) {
+		execute_job(job, stack_a, stack_b);
+		sort(create_job(job, STACK_A), stack_a, stack_b);
+		sort(create_job(job, STACK_B), stack_a, stack_b);
 	}
-	else if (job.lives_on == STACK_B) {
-		if (JOB_SIZE(job) > 2) { // chunk is larger than 2 elements
-			execute_job(job, stack_a, stack_b);
-			sort(create_job(job, STACK_A), stack_a, stack_b);
-			sort(create_job(job, STACK_B), stack_a, stack_b);
-		}
-		else
-			direct_sort(job, stack_a, stack_b, STACK_B);
-	}
+	else
+		direct_sort(job, stack_a, stack_b);
 }
