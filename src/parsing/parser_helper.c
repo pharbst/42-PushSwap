@@ -34,7 +34,7 @@ void *parse_error(const char *error_msg, void *pointer_to_free, void **pointers_
 
 // check if stack is already sorted
 bool _check_sorted(t_int_stack *int_stack) {
-	size_t	index;
+	__int64_t	index;
 
 	if (int_stack->len < 2)
 		return (true);

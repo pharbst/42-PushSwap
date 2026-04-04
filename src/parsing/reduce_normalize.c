@@ -49,8 +49,8 @@ char *ft_str_concat(char **to_concat, char *seperator) {
 }
 
 void element_normalization_reduction(char *input, size_t *index) {
-	size_t	i;
-	size_t	neg;
+	__int64_t	i;
+	__int64_t	neg;
 	int		error_code;
 
 	neg = 0;

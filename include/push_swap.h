@@ -13,6 +13,8 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
+// 0 in input can lead to incorrect duplicate error
+
 // Library includes
 # include <limits.h>
 # include <stdio.h>
@@ -23,39 +25,48 @@
 
 // Data Structs
 typedef struct s_int_stack {
-	size_t	len;
-	int		*raw_stack;
+	__int64_t	len;
+	__int64_t	*raw_stack;
 }	t_int_stack;
 
 typedef struct s_stack {
-	unsigned int	*ranked_stack;
-	size_t			size;
-	size_t			capacity;
-	size_t			head;
+	__int64_t	*ranked_stack;
+	__int64_t	size;
+	__int64_t	capacity;
+	__int64_t	head;
 }	t_stack;
 
 typedef struct s_chunk {
-	unsigned int	min;
-	unsigned int	max;
-	unsigned int	pivot;
-	bool			lives_on;
+	__int64_t	min;
+	__int64_t	max;
+	__int64_t	pivot;
+	bool		lives_on;
 }	t_chunk;
 
 // for lives_on parameter
 # define STACK_A true
 # define STACK_B false
 
-# define JOB_SIZE(job) ((job).max - (job).min + 1)
-# define NEXT(stack) ((((stack)->head) + 1) % ((stack)->capacity))
-# define PREV(stack) (((stack)->head - 1 + (stack)->capacity) % (stack)->capacity)
-# define TOP(stack) ((stack)->ranked_stack[(stack)->head])
-# define BOT(stack) ((stack)->ranked_stack[PREV((stack))])
+// second index
+# define NEXT(stack) ((stack)->head + 1 % (stack)->size)
+// last index
+# define PREV(stack) ((((stack)->head - 1) + (stack)->size) % (stack)->size)
+// top element
+# define TOP(stack) ELEMENT(stack, 0)
+// bottom element
+# define BOT(stack) ELEMENT(stack, -1)
+// true if element is part of job
 # define PART_OF(job, element) ((element) >= (job).min && (element) <= (job).max)
-# define BELOW_PIVOT(job, element) ((element) >= (job).min && (element) < (job).pivot)
+// true if element is below pivot
+# define BELOW_PIVOT(job, element) ((element) >= (job).min && (element) <= (job).pivot)
+// true if element above pivot
 # define ABOVE_PIVOT(job, element) ((element) > (job).pivot && (element) <= (job).max)
-// get specific element using the index positive and negative index is possible (-1 is the same as BOT())
-# define ELEMENT(stack, index) ((stack)->ranked_stack[(((stack)->head + ((index) % (stack)->capacity)) + (stack)->capacity) % (stack)->capacity])
-# define PUSHABLE(job, element) ()
+// element at index from head circular protection
+# define ELEMENT(stack, index) (stack)->ranked_stack[(((stack)->head + ((index) % (stack)->size)) + (stack)->size) % (stack)->size]
+// true if element is part of pushable for the job
+# define PUSHABLE(job, element) ((job.lives_on == STACK_A && BELOW_PIVOT(job, element)) || (job.lives_on == STACK_B && ABOVE_PIVOT(job, element)))
+// number of elements for the job
+# define JOB_SIZE(job) ((job).max - (job).min + 1)
 
 enum operations{
 	PA = 1,
@@ -71,18 +82,18 @@ enum operations{
 	RRR
 };
 
-t_stack *join_op_list(unsigned int to_join, bool just_read);
+t_stack *join_op_list(__int64_t to_join, bool just_read);
 
 // Parsing
 char			*strjoin(char const *s1, char const *s2);
 char			*ft_str_concat(char **to_concat, char *seperator);
 char			*normalize_and_reduce(char *input);
 char			*input_parser(char **argv);
-int				count_spaces(char *input);
-void			isolate_element(char *input_string, size_t *index, int *to_insert, size_t *sub_index);
+__int64_t		count_spaces(char *input);
+void			isolate_element(char *input_string, __int64_t *index, int *to_insert, __int64_t *sub_index);
 bool			insert_values(t_int_stack *int_stack, char *input_string);
 t_int_stack		*create_raw_stack(char *input_string, int num_of_elements);
-unsigned int	*ranker(t_int_stack *original);
+__int64_t		*ranker(t_int_stack *original);
 void			*parse_error(const char *error_msg, void *pointer_to_free, void **pointers_to_free, void *return_value);
 bool			_check_sorted(t_int_stack *int_stack);
 
