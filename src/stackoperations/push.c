@@ -11,7 +11,8 @@ bool push(t_stack *dest, t_stack *src) {
 	// fflush(stdout);
 	memmove(&ELEMENT(src, 0), &ELEMENT(src, 1), (src->size - src->head - 1) * sizeof(__int64_t));
 	src->size--;
-	src->head %= src->size;
+	if (src->size)
+		src->head %= src->size;
 	return (false);
 }
 

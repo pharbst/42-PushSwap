@@ -161,23 +161,24 @@ void execute_job(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
 	}
 }
 
+// last push from stack_b is missing and therefore the last check for stack_a
 void direct_sort(t_chunk job, t_stack *stack_a, t_stack *stack_b) {
-	int	index;
+	__int64_t	index;
 
 	if (job.lives_on == STACK_A) {
 		if (!issorted(stack_a))
 			return;
 		index = 0;
-		while (PART_OF(job, BOT(stack_a)) && index++ < (int)stack_a->size) {
+		while (PART_OF(job, BOT(stack_a)) && index++ < stack_a->size) {
 			join_op_list(rra(stack_a), false);
 		}
 	}
 	else if (job.lives_on == STACK_B) {
 		index = 0;
-		while (PART_OF(job, BOT(stack_b)) && index++ < (int)stack_b->size)
+		while (PART_OF(job, BOT(stack_b)) && index++ < stack_b->size && stack_b->size > 2)
 			join_op_list(rrb(stack_b), false);
 		index = 0;
-		while (PART_OF(job, TOP(stack_b)) && index++ < (int)stack_b->size)
+		while (index++ <= stack_b->size && PART_OF(job, TOP(stack_b)))
 			join_op_list(pa(stack_a, stack_b), false);
 	}
 	if (issorted(stack_a))
