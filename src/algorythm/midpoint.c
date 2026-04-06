@@ -35,8 +35,6 @@ t_stack *join_op_list(__int64_t to_join, bool just_read) {
 	static t_stack	op_list;
 	t_stack			old_list;
 
-	if (op_list.size == 1000)
-		printf("here\n");
 	if (just_read)
 		return (&op_list);
 	if (!op_list.ranked_stack) {
@@ -82,8 +80,8 @@ bool top_is_cheaper(t_chunk job, t_stack *stack) {
 			not_pushable_bot++;
 
 	if (not_pushable_top <= not_pushable_bot)
-		return (true);
-	return (false);
+		return (false);
+	return (true);
 }
 
 __int64_t count_elements_to_push(t_chunk job, t_stack *stack, bool top) {

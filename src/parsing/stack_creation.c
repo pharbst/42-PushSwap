@@ -12,7 +12,6 @@
 
 # include <push_swap.h>
 
-// Counts spaces in a string
 __int64_t count_spaces(char *input) {
 	int	index;
 	int	counter;
@@ -40,7 +39,6 @@ void isolate_element(char *input_string, __int64_t *index, int *to_insert, __int
 		*to_insert = atoi(&input_string[*index]);
 }
 
-// loops over the string isolates one element, extracts it, and inserts it into the raw stack
 bool insert_values(t_int_stack *int_stack, char *input_string) {
 	__int64_t	index;
 	__int64_t	sub_index;
@@ -55,7 +53,7 @@ bool insert_values(t_int_stack *int_stack, char *input_string) {
 			index++;
 		isolate_element(input_string, &index, &to_insert, &sub_index);
 		element_dub = 0;
-		while (element + element_dub < int_stack->len) {
+		while (element + element_dub < int_stack->len - 1) {
 			if (int_stack->raw_stack[element_dub] == to_insert)
 				return (true);
 			element_dub++;
@@ -66,11 +64,9 @@ bool insert_values(t_int_stack *int_stack, char *input_string) {
 	return (false);
 }
 
-// creates an integer array of the normalized string
 t_int_stack *create_raw_stack(char *input_string, int num_of_elements) {
 	t_int_stack	*int_stack;
 
-	// allocate
 	int_stack = calloc(1, sizeof(t_int_stack));
 	if (!int_stack)
 		return (NULL);
@@ -79,16 +75,11 @@ t_int_stack *create_raw_stack(char *input_string, int num_of_elements) {
 		return (free(int_stack), NULL);
 	int_stack->len = num_of_elements;
 
-	// loop over string and extract one element convert it to int and put it into int_stack->raw_stack
-	// make it a function
 	if (insert_values(int_stack, input_string))
 		return (NULL);
 	return (int_stack);
 }
 
-
-// produces a new stack with the final required indexes for working midpoint algo
-// original stack: [9, 6, 5, 4, 8] -> copy: [5, 3, 2, 1, 4, 0] (0 is treated like '\0' terminater to get rid of a size value)
 __int64_t *ranker(t_int_stack *original) {
 	__int64_t		*copy;
 	__int64_t		lowest;

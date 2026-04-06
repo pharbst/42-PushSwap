@@ -1,5 +1,7 @@
 # PushSwap
 This is my second push swap project in which i want to improve the midpoint algo i've used in the first project.
+
+> I put this project on hold for now but feel free to be inspired or even find the inefficiency and why this is ~500 operations worse than the previous version from 4 years ago.
 ## Parser
 ### Input
 The parser is build to parse as much as possible.
